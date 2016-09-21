@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Ninja Gold</title>
+	<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='style.css')}}">
+</head>
+<body>
+	<p>Your score:</p><p id="score">{{gold}}</p>
+	<div id="main">
+		<div class="second">
+			<h3>Farm</h3>
+			<p>(earns 10-20 gold)</p>
+			<form action="/process_money" method="post">
+				<input type="hidden" name="building" value="farm" />
+				<input type="submit" value="Find Gold!"/>
+			</form>
+		</div>
+		<div class="second">
+			<h3>Cave</h3>
+			<p>(earns 5-10 gold)</p>
+			<form action="/process_money" method="post">
+				<input type="hidden" name="building" value="cave" />
+				<input type="submit" value="Find Gold!"/>
+			</form>			
+		</div>
+		<div class="second">
+			<h3>House</h3>
+			<p>(earns 2-5 gold)</p>
+			<form action="/process_money" method="post">
+				<input type="hidden" name="building" value="house" />
+				<input type="submit" value="Find Gold!"/>
+			</form>				
+		</div>
+		<div class="second">
+			<h3>Casino</h3>
+			<p>(earns/takes 0-50 gold)</p>
+			<form action="/process_money" method="post">
+				<input type="hidden" name="building" value="casino" />
+				<input type="submit" value="Find Gold!"/>
+			</form>				
+		</div>
+	</div>
+	<div>
+		<p>Activities:</p>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                  <div id="activities">
+                    <p class = {{session['color']}}>
+                    	{{ message }}
+                    </p>                    
+                  </div>
+                {% endfor %}
+            {% endif %}
+         {% endwith %}
+	</div>
+</body>
+</html>

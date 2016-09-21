@@ -1,0 +1,46 @@
+body{
+	width: 80%;
+	margin: 0px auto;
+	border: 1px solid black;
+}
+
+body p{
+	display: inline-block;
+}
+
+#score{
+	border:1px solid black;
+	width: 10%;
+}
+
+#main{
+	width: 100%;
+
+}
+
+.second{
+	display: inline-block;
+	width: 23%; 
+	margin: 10px;
+	border: 1px solid black;
+	text-align: center;
+}
+
+.second input{
+	margin-bottom: 10px; 
+}
+
+#activities{
+	margin: 10px;
+	border: 1px solid black;
+}
+
+.green{
+	color:green;
+	margin-left:5px; 
+}
+
+.red{
+	color:red;
+	margin-left:5px; 
+}
