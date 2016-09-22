@@ -1,40 +1,42 @@
-from flask import Flask,render_template,request,redirect,session,flash
+from flask import Flask, request, render_template, redirect, session
 import random
 app = Flask(__name__)
-app.secret_key = 'secret'
+app.secret_key = 'secret key'
 
 @app.route('/')
 def index():
-	session['gold']
-	return render_template("index.html",gold = session['gold'])
+    try:
+        session['gold']
+    except:
+        session['gold'] = 0
+    try:
+        session['comments']
+    except:
+        session['comments'] = [{'style': 'white', 'comment': 'Welcome to ninja gold'}]
+    return render_template('index.html')
 
-@app.route('/process_money',methods=['POST'])
-def findGold():
-	session['numberFarm'] = random.randrange(10,21)
-	session['numberCave'] = random.randrange(5,11)
-	session['numberHouse'] = random.randrange(2,6)
-	session['numberCasino']	= random.randrange(-50,51) 
-	if(request.form['building'] == 'farm'): 
-		flash('Earned ' + str(session['numberFarm']) +' from the farm!')
-		session['gold'] += session['numberFarm']
-		session['color'] = 'green'
-	elif(request.form['building'] == 'cave'):
-		flash('Earned '	+ str(session['numberCave']) + ' from the cave!')
-		session['gold'] += session['numberCave']
-		session['color'] = 'green'
-	elif(request.form['building'] == 'house'):
-		flash('Earned ' + str(session['numberHouse']) + ' from the house!')
-		session['gold'] += session['numberHouse']
-		session['color'] = 'green'
-	elif(request.form['building'] == 'casino'):
-		if(session['numberCasino'] < 0):
-			flash('Lost ' + str(session['numberCasino']) + ' from the casino! Ouch...')
-			session['gold'] += session['numberCasino']
-			session['color'] = 'red'
-		elif(session['numberCasino'] >= 0):
-			flash('Earned ' + str(session['numberCasino']) + ' from the casino!')
-			session['gold'] += session['numberCasino']
-			session['color'] = 'green'
-	return redirect('/')
-					
-app.run(debug=True)	
+@app.route('/process_gold', methods = ['POST'])
+def generate_gold():
+    mylam = lambda x,y:random.randrange(x,y)
+    data = {'cave':mylam(5,11), 'farm':mylam(10,21), 'casino':mylam(-50,51), 'house':mylam(2,6)}
+    try:
+        request.form['building']
+        session['gold'] += data[request.form['building']]
+        if data[request.form['building']] > 0:
+            style = 'green'
+        else:
+            style = 'red'
+        session['comments'].append({'style':style, 'comment':"You entered the {} and {} {} gold.\n".format(request.form['building'], style, data[request.form['building']])})
+    except:
+        print 'fail'
+    return redirect('/')
+
+@app.route('/reset')
+def reset():
+    session.pop('gold')
+    session.pop('comments')
+    return redirect('/')
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
